@@ -16,7 +16,7 @@ For now, we recommend not using this. If you do, you'll have to go through the c
 
 - If the blocker extension, or the Secordis Security extension goes down, you can lockdown the session.
 - Resistant to different attacks like DNS poisoning through Omada, LTMEAT, DPS, issues abused in Insecurly/Cookie Dough, issued abused in SWAMP, etc.
-- Very little user input, hard to XSS, and impossible to XSS the Security extension which has the only abusable special permission `management`.
+- It is impossible to XSS the Security extension which has the only abusable special permission `management`.
 
 **This is why it is extremely recommended to integrate Secordis with other blockers, instead of installing the other blocker extensions. We avoid possible abusable permissions which only matters if other possibly less secure blocker extensions aren't installed, which can be abused.**
 
