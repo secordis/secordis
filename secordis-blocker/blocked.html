@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secordis Security Triggered</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(325deg, rgba(51,9,13,1) 0%, rgba(249,22,22,1) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            text-align: center;
+        }
+        .logo-container {
+            margin-bottom: 1rem;
+        }
+        .logo {
+            max-width: 150px;
+            height: auto;
+        }
+        h1 {
+            color: #d9534f;
+            margin-top: 0;
+        }
+        .secordis-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        p {
+            margin-bottom: 1rem;
+        }
+        .subtext {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .alert {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        #blockinfo {
+            background-color: #f8d7da;
+            border: 1px solid #ff838f;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img id="secordisLogo" alt="Secordis Logo" class="logo">
+        </div>
+        <div class="alert">
+            <h2><strong>Site blocked.</strong></h2>
+            <p>Secordis blocked your access to this website.</p>
+        </div>
+        <p class="subtext">Don't think you should be seeing this? Ask someone authorized to help (like your teacher).</p>
+        <p class="subtext"><button id="blockinfo">Click to see block info</button></p>
+    </div>
+
+    <script src="blocked.js"></script>
+</body>
+</html>

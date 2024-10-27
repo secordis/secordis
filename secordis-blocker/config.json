@@ -1,0 +1,7 @@
+{
+    "districtSpecific": "ASDFG-987654321",
+    "integrations": [],
+    "blockedCat": ["games", "test", "proxy"],
+    "security": "koiolcaaoimblhjnfbabfnpohpdoienb",
+    "lockdown": "false"
+}

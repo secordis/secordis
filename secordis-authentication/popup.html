@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>  
+      body {
+        width: 300px;
+        margin: 0;
+        padding: 16px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        color: #202124;
+        background: linear-gradient(325deg, rgb(228, 255, 232) 0%, rgb(255, 255, 255) 100%);
+      }
+
+      img {
+        max-width: 150px;
+        display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+      }
+
+      h3 {
+        margin: 0 0 12px 0;
+        font-size: 16px;
+        font-weight: 500;
+        color: #202124;
+        text-align: center;
+      }
+
+      p {
+        margin: 0 0 16px 0;
+        padding: 8px 12px;
+        font-size: 12px;
+        line-height: 1.4;
+        color: #5f6368;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        border-left: 3px solid #f29900;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 4px;
+        color: #5f6368;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      input {
+        width: calc(100% - 16px);
+        padding: 8px;
+        margin-bottom: 12px;
+        border: 1px solid #dadce0;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #202124;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+      }
+
+      button {
+        width: 100%;
+        padding: 8px 16px;
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      button:hover {
+        background-color: #1557b0;
+      }
+
+      button:active {
+        background-color: #174ea6;
+      }
+
+      input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 30px white inset;
+      }
+    </style>
+  </head>
+  <body>
+    <img alt="Large Secordis Icon" src="large_secordis.png" />
+    <h3>Admin Authenticator</h3>
+    <p>Once set, refresh the instance URL/visit the instance. If the password is right, you should see the Admin dashboard for your instance. NEVER share the password. If possible, keep the Secordis Admin instance local on the network. You should only be forwarding the extension hosting port.</p>
+    <label for="instance">Instance URL:</label>
+    <input type="url" id="instance" placeholder="https://example.com" required>
+    <label for="password">Password for Instance:</label>
+    <input type="password" id="password" required>
+    <button id="save">Save & Authenticate</button>
+    <script src="popup.js"></script>
+  </body>
+</html>

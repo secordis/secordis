@@ -1,0 +1,44 @@
+{
+    "manifest_version": 2,
+    "name": "Secordis",
+    "description": "Dynamic, privacy-focused blocker.",
+    "version": "1.0",
+    "web_accessible_resources": ["blocked.html"],
+    "background": {
+        "scripts": ["lightspeed.js", "background.js"],
+        "persistent": true
+    },
+    "icons": {
+        "48": "white_icon.png"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"],
+            "all_frames": true,
+            "run_at": "document_start",
+            "match_origin_as_fallback": true,
+            "match_about_blank": true
+        }
+    ],
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "webNavigation",
+        "<all_urls>",
+        "tabs",
+        "storage",
+        "unlimitedStorage",
+        "scripting",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAne0kFlflYSsssxladV35B5PAuiMcuokvpAJjZ61wQJTc4lZy4XUKCa9xN3xlkw0lR+49jk5rDw0Si5SOFRpjDGTemQJ1u7f2skaOSZCpfGCVmzMk2LaTC5P8KHFKBOXentGOyeFbPeh0nHrv989Hgk8I+uv2OmbxYwWeIx95X8S1W3KiiPW7O5dE1qoSWGk8fp2etGTKrHVy7xABHW3DVCYH5n27v147joN5GkRvqImTvSKkGAZ3+Dm1nqHcTDUFBESXd7fWJqN2+PywIPtzVbctWFFOI3Uw1qATb1Y2qAXP2Rb1R+Q155ni4H+l/Sy3XoqzLiMrqPA8Zg6OIxOK5QIDAQAB",
+    "externally_connectable": {
+        "ids": [
+          "koiolcaaoimblhjnfbabfnpohpdoienb"
+        ]
+    }
+}

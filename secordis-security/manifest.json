@@ -1,0 +1,33 @@
+{
+    "manifest_version": 3,
+    "name": "Secordis Security",
+    "description": "Part of the Secordis system.",
+    "version": "1.0",
+    "permissions": [
+        "management",
+        "tabs",
+        "webRequest",
+        "webRequestBlocking",
+        "declarativeNetRequest",
+        "declarativeNetRequestWithHostAccess"
+    ],
+    "host_permissions": [
+        "<all urls>"
+    ],
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAykPytrJBYaGYN8pusl2jCsdHz8qq0jy/2Ygy5wwbR7qtsPzOtz1rsKuV5HNpsz1lhwqKPE489VdZtOEd9y8WPtmEAyurcvgQWu95OQAtcWEBEc6Rc2rTemG6LsG53/XjDZn4mU0rKIm+i72yQTmn5jKVyzOeyPcgKzNqFYsWc+cZdiYip7VJQ8K/AuKp5sQ6/GKTg3902G9DZa5ihGAM4FPSZLvgph/w8ZN5kbKr/CR4qSkPiNEIuNl+Ru6BaURF3UaHRYXeyJ/l6NEzqnWgYJ+OqTN0c1xzfp2rW+RgIn97t7U96ZxgYOB2+gkvSzMEEf4PpnMANSlVndxyDpFiSwIDAQAB",
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["blocked.txt"],
+            "matches": ["chrome-extension://gogiabhlalhhmloakigiohfmgdoeneje/*"]
+        }
+    ],
+    "externally_connectable": {
+        "ids": [
+          "gogiabhlalhhmloakigiohfmgdoeneje"
+        ]
+    }
+}

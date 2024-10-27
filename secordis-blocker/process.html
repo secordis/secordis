@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Processor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/terser/dist/bundle.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            line-height: 1.5;
+        }
+
+        .drop-zone {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .drop-zone:hover {
+            background: #e9ecef;
+        }
+
+        .drop-zone.dragover {
+            border-color: #0d6efd;
+            background: #e7f1ff;
+        }
+
+        #log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 1rem;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            font-family: monospace;
+        }
+
+        .log-entry {
+            margin: 0.25rem 0;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .success { color: #198754; }
+        .error { color: #dc3545; }
+        .info { color: #0dcaf0; }
+        
+        button {
+            background: #0d6efd;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background: #0b5ed7;
+        }
+
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #0d6efd;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <h1>File Processor</h1>
+    <div class="drop-zone" id="dropZone">
+        Drop your ZIP file here or click to select
+        <input type="file" id="fileInput" accept=".zip" style="display: none">
+    </div>
+    <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+    </div>
+    <div id="log"></div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const logElement = document.getElementById('log');
+        const progressBar = document.getElementById('progressBar');
+
+        let totalFiles = 0;
+        let processedFiles = 0;
+
+        function updateProgress() {
+            const percentage = (processedFiles / totalFiles) * 100;
+            progressBar.style.width = `${percentage}%`;
+        }
+
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+            logElement.appendChild(entry);
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        async function minifyJavaScript(code) {
+            try {
+                const result = await window.Terser.minify(code, {
+                    compress: true,
+                    mangle: true
+                });
+                return result.code;
+            } catch (error) {
+                log(`Error minifying JavaScript: ${error.message}`, 'error');
+                return code;
+            }
+        }
+
+        async function processFile(filename, content) {
+            try {
+                let processedContent = content;
+                
+                if (filename.endsWith('.js')) {
+                    log(`Minifying JavaScript file: ${filename}`);
+                    processedContent = await minifyJavaScript(content);
+                } else {
+                    log(`Skipping non-JavaScript file: ${filename}`);
+                }
+                
+                processedFiles++;
+                updateProgress();
+                return processedContent;
+            } catch (error) {
+                log(`Error processing ${filename}: ${error.message}`, 'error');
+                return content;
+            }
+        }
+
+        async function processZipFile(file) {
+            try {
+                log('Reading ZIP file...');
+                const zip = await JSZip.loadAsync(file);
+                
+                totalFiles = Object.keys(zip.files).length;
+                processedFiles = 0;
+                
+                log(`Found ${totalFiles} files in ZIP`);
+                
+                const newZip = new JSZip();
+                
+                for (const [filename, zipEntry] of Object.entries(zip.files)) {
+                    if (!zipEntry.dir) {
+                        const content = await zipEntry.async('string');
+                        const processedContent = await processFile(filename, content);
+                        newZip.file(filename, processedContent);
+                    } else {
+                        newZip.folder(filename);
+                    }
+                }
+                
+                log('Generating new ZIP file...', 'info');
+                const processedZip = await newZip.generateAsync({
+                    type: 'blob',
+                    compression: 'DEFLATE',
+                    compressionOptions: { level: 9 }
+                });
+                
+                const downloadUrl = URL.createObjectURL(processedZip);
+                const downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                downloadLink.download = 'processed_' + file.name;
+                
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                log('Processing complete! Download starting...', 'success');
+            } catch (error) {
+                log(`Error processing ZIP file: ${error.message}`, 'error');
+            }
+        }
+
+        // Drop zone event handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file.type === 'application/zip' || file.name.endsWith('.zip')) {
+                processZipFile(file);
+            } else {
+                log('Please drop a ZIP file', 'error');
+            }
+        });
+
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                processZipFile(file);
+            }
+        });
+
+        // Check if libraries are loaded
+        window.addEventListener('load', () => {
+            if (!window.Terser) {
+                log('Error: Terser library not loaded properly', 'error');
+            }
+            if (!window.JSZip) {
+                log('Error: JSZip library not loaded properly', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

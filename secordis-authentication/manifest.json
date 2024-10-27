@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "Secordis Admin Authenticator",
+    "version": "1.5",
+    "description": "Authenticate yourself for a selected Secordis Admin instance.",
+    "permissions": ["declarativeNetRequest", "storage", "activeTab", "scripting"],
+    "host_permissions": ["<all_urls>"],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "icons": {
+      "512": "black_icon.png"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "declarative_net_request": {
+      "rule_resources": [{
+        "id": "rules",
+        "enabled": true,
+        "path": "rules.json"
+      }]
+    }
+  }
+  
